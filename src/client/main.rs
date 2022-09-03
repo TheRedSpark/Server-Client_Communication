@@ -26,6 +26,8 @@ fn main() {
                     println!("Failed to receive data: {}", e);
                 }
             }
+            stream.write(b"Hello Message").unwrap();
+
         },
         Err(e) => {
             println!("Failed to connect: {}", e);

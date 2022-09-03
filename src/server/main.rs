@@ -7,7 +7,11 @@ fn handle_client(mut stream: TcpStream) {
     while match stream.read(&mut data) {
         Ok(size) => {
             // echo everything!
+            let mut massage = String::new();
+
             stream.write(&data[0..size]).unwrap();
+            stream.read_to_string(&mut massage).unwrap();
+            println!("Die Message ist: {massage} {}",stream.peer_addr().unwrap());
             true
         },
         Err(_) => {
@@ -16,6 +20,7 @@ fn handle_client(mut stream: TcpStream) {
             false
         }
     } {}
+    //stream.shutdown(Shutdown::Both).unwrap();
 }
 
 fn main() {
