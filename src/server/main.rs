@@ -3,45 +3,20 @@ use std::net::{TcpListener, TcpStream, Shutdown};
 use std::io::{Read, Write};
 
 fn handle_client(mut stream: TcpStream) {
-    let mut data = [0 as u8; 50]; // using 50 byte buffer
-    while match stream.read(&mut data) {
-        Ok(size) => {
-            // echo everything!
-            let mut massage = String::new();
-
-            stream.write(&data[0..size]).unwrap();
-            stream.read_to_string(&mut massage).unwrap();
-            println!("Die Message ist: {massage} {}",stream.peer_addr().unwrap());
-            true
-        },
-        Err(_) => {
-            println!("An error occurred, terminating connection with {}", stream.peer_addr().unwrap());
-            stream.shutdown(Shutdown::Both).unwrap();
-            false
-        }
-    } {}
-    //stream.shutdown(Shutdown::Both).unwrap();
+    println!("Client connectet");
+    let mut data = [0 as u8; 50];
+    stream.read(&mut data).unwrap();
+    stream.write(&data[0..4]).unwrap();
+    //stream.write(b"Herunterfahren").unwrap();
+    println!("Echo send wait for Reply")
 }
 
-fn main() {
-    let listener = TcpListener::bind("0.0.0.0:3333").unwrap();
-    // accept connections and process them, spawning a new thread for each one
-    println!("Server listening on port 3333");
+fn main() -> std::io::Result<()> {
+    let listener = TcpListener::bind("127.0.0.1:80")?;
+
+    // accept connections and process them serially
     for stream in listener.incoming() {
-        match stream {
-            Ok(stream) => {
-                println!("New connection: {}", stream.peer_addr().unwrap());
-                thread::spawn(move|| {
-                    // connection succeeded
-                    handle_client(stream)
-                });
-            }
-            Err(e) => {
-                println!("Error: {}", e);
-                /* connection failed */
-            }
-        }
+        handle_client(stream?);
     }
-    // close the socket server
-    drop(listener);
+    Ok(())
 }
