@@ -6,7 +6,7 @@ fn handle_client(mut stream: TcpStream) {
     println!("Client connectet");
     let mut data = [0 as u8; 50];
     stream.read(&mut data).unwrap();
-    stream.write(&data[0..4]).unwrap();
+    stream.write(&data).unwrap();
     //stream.write(b"Herunterfahren").unwrap();
     println!("Echo send wait for Reply")
 }
