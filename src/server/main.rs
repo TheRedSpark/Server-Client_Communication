@@ -1,3 +1,4 @@
+#![allow(unused)]
 use std::thread;
 use std::net::{TcpListener, TcpStream, Shutdown};
 use std::io::{Read, Write};
@@ -30,9 +31,8 @@ fn handle_data(incomming_data: &[u8]) -> String {
         b"D000000000000001" => b"D000000000000002",
         &_ => b"Der000005555ror1"
     };
-    let mut s = String::new();
-    s = str::from_utf8(&data).unwrap().parse().unwrap();
-    return s;
+    let response = str::from_utf8(&data).unwrap().parse().unwrap();
+    return response;
 }
 
 fn main() -> std::io::Result<()> {
