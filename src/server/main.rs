@@ -2,7 +2,6 @@
 use std::thread;
 use std::net::{TcpListener, TcpStream, Shutdown};
 use std::io::{Read, Write};
-//use std::str::from_utf8;
 use std::str;
 
 fn handle_client(mut stream: TcpStream) {
@@ -19,11 +18,6 @@ fn handle_client(mut stream: TcpStream) {
     let data = handle_data(data.as_bytes());
     let response: String = format!("{}{}{}{}", echo_key, client_id, data, command);
     stream.write(response.as_ref()).unwrap();
-    // stream.write(client_id.as_ref()).unwrap();
-    // stream.write(data.as_ref()).unwrap();
-    // stream.write(command.as_ref()).unwrap();
-    //stream.write(b"Herunterfahren").unwrap();
-    //println!("Echo send wait for Reply")
 }
 
 fn handle_data(incomming_data: &[u8]) -> String {
@@ -38,7 +32,6 @@ fn handle_data(incomming_data: &[u8]) -> String {
 fn main() -> std::io::Result<()> {
     let listener = TcpListener::bind("127.0.0.1:80")?;
 
-    // accept connections and process them serially
     for stream in listener.incoming() {
         handle_client(stream?);
     }
